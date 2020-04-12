@@ -59,7 +59,8 @@ exports.onCovid19Xml = (req, res) => {
       }
     };
     const xml = jsonxml(returnData);
-    res.set('Content-Type', 'text/xml');
+    res.type('application/xml');
+    // res.set('Content-Type', 'text/xml');
     res.status(201).send(xml);
   }
 };
