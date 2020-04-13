@@ -63,13 +63,20 @@ exports.onCovid19 = (req, res) => {
     res.status(201).json(returnData);
     res.on('finish', () => {
       const durationInMilliseconds = helper.getDurationInMilliseconds(start);
+      const durationInt = Math.floor(durationInMilliseconds).toLocaleString();
+      let time;
+      if (durationInt.length <= 1) {
+        time = `0${durationInt}`;
+      } else {
+        time = durationInt;
+      }
       let url;
       if (req.originalUrl === '/api/v1/on-covid-19/json') {
         url = '/api/v1/on-covid-19/json';
       } else if (req.originalUrl === '/api/v1/on-covid-19') {
         url = '/api/v1/on-covid-19     ';
       }
-      const log = `${req.method}    ${url}    ${res.statusCode}   ${Math.floor(durationInMilliseconds).toLocaleString()}ms \n`;
+      const log = `${req.method}    ${url}    ${res.statusCode}   ${time}ms\n`;
       fs.appendFile('logs.txt', log, (err) => {
       // Catch this!
         if (err) throw err;
