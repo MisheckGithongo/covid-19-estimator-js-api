@@ -66,7 +66,14 @@ exports.onCovid19Xml = (req, res) => {
     res.status(201).send(xml);
     res.on('finish', () => {
       const durationInMilliseconds = helper.getDurationInMilliseconds(start);
-      const log = `${req.method}    ${req.originalUrl}     ${res.statusCode}   ${Math.floor(durationInMilliseconds).toLocaleString()}ms \n`;
+      const durationInt = Math.floor(durationInMilliseconds).toLocaleString();
+      let time;
+      if (durationInt.length <= 1) {
+        time = `0${durationInt}`;
+      } else {
+        time = durationInt;
+      }
+      const log = `${req.method}    ${req.originalUrl}     ${res.statusCode}   ${time}ms\n`;
       fs.appendFile('logs.txt', log, (err) => {
       // Catch this!
         if (err) throw err;
