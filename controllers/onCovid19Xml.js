@@ -1,6 +1,9 @@
 const jsonxml = require('jsontoxml');
+const fs = require('fs');
+const helper = require('./helper');
 
 exports.onCovid19Xml = (req, res) => {
+  const start = process.hrtime();
   // eslint-disable-next-line max-len
   if (!req.body.region || !req.body.region.name || !req.body.region.avgAge || !req.body.region.avgDailyIncomeInUSD || !req.body.region.avgDailyIncomePopulation || !req.body.periodType || !req.body.timeToElapse || !req.body.reportedCases || !req.body.population || !req.body.totalHospitalBeds) {
     res.status(400).json({ Message: 'Invalid Input' });
@@ -60,7 +63,14 @@ exports.onCovid19Xml = (req, res) => {
     };
     const xml = jsonxml(returnData);
     res.type('application/xml');
-    // res.set('Content-Type', 'text/xml');
     res.status(201).send(xml);
+    res.on('finish', () => {
+      const durationInMilliseconds = helper.getDurationInMilliseconds(start);
+      const log = `${req.method}    ${req.originalUrl}     ${res.statusCode}   ${durationInMilliseconds.toLocaleString()}ms \n`;
+      fs.appendFile('logs.txt', log, (err) => {
+      // Catch this!
+        if (err) throw err;
+      });
+    });
   }
 };
