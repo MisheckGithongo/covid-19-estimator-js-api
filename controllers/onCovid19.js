@@ -69,7 +69,7 @@ exports.onCovid19 = (req, res) => {
       } else if (req.originalUrl === '/api/v1/on-covid-19') {
         url = '/api/v1/on-covid-19     ';
       }
-      const log = `${req.method}    ${url}    ${res.statusCode}   ${durationInMilliseconds.toLocaleString()}ms \n`;
+      const log = `${req.method}    ${url}    ${res.statusCode}   ${Math.floor(durationInMilliseconds).toLocaleString()}ms \n`;
       fs.appendFile('logs.txt', log, (err) => {
       // Catch this!
         if (err) throw err;

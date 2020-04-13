@@ -12,11 +12,11 @@ exports.logs = (req, res) => {
       throw err;
     } else {
       returnData = data.toString();
-      res.type('application/text');
+      res.set('Content-type', 'text/plain');
       res.status(200).send(returnData);
       res.on('finish', () => {
         const durationInMilliseconds = helper.getDurationInMilliseconds(start);
-        const log = `${req.method}     ${req.originalUrl}    ${res.statusCode}   ${durationInMilliseconds.toLocaleString()}ms \n`;
+        const log = `${req.method}     ${req.originalUrl}    ${res.statusCode}   ${Math.floor(durationInMilliseconds).toLocaleString()}ms \n`;
         fs.appendFile('logs.txt', log, (err2) => {
         // Catch this!
           if (err2) throw err;
